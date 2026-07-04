@@ -1,8 +1,8 @@
 # Product Middleware; Fullstack Monorepo
 
-Phases 1-3 of task for AA.
+Phases 1-5 of task for AA.
 
-Henceforth, only latest change will be noted until this is rebuilt into a proper readme. Latest: API.
+Henceforth, only latest change will be noted until this is rebuilt into a proper readme. Latest: Caching.
 Also dependency injection.
 ```
 

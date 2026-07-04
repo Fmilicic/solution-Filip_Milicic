@@ -9,7 +9,9 @@ public static class DependencyInjection
     public static IServiceCollection AddApplication(this IServiceCollection services)
     {
         services.AddScoped<ProductQueryService>();
-        services.AddScoped<IProductQueryService>(sp => sp.GetRequiredService<ProductQueryService>());
+        services.AddScoped<CachedProductQueryService>();
+        services.AddScoped<IProductQueryService>(sp => sp.GetRequiredService<CachedProductQueryService>());
+        services.AddScoped<IProductQueryCacheInvalidator>(sp => sp.GetRequiredService<CachedProductQueryService>());
         services.AddScoped<AuthService>();
         services.AddScoped<IAuthService>(sp => sp.GetRequiredService<AuthService>());
 

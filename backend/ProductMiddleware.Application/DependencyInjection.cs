@@ -14,6 +14,8 @@ public static class DependencyInjection
         services.AddScoped<IProductQueryCacheInvalidator>(sp => sp.GetRequiredService<CachedProductQueryService>());
         services.AddScoped<AuthService>();
         services.AddScoped<IAuthService>(sp => sp.GetRequiredService<AuthService>());
+        services.AddScoped<ProductAdminService>();
+        services.AddScoped<IProductAdminService>(sp => sp.GetRequiredService<ProductAdminService>());
 
         return services;
     }

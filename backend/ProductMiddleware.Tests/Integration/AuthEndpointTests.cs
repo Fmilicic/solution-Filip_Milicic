@@ -2,15 +2,15 @@ using System.Net;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text.Json;
-using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace ProductMiddleware.Tests.Integration;
 
-public class AuthEndpointTests : IClassFixture<WebApplicationFactory<Program>>
+[Collection("Integration")]
+public class AuthEndpointTests
 {
-    private readonly WebApplicationFactory<Program> _factory;
+    private readonly IntegrationWebApplicationFactory _factory;
 
-    public AuthEndpointTests(WebApplicationFactory<Program> factory)
+    public AuthEndpointTests(IntegrationWebApplicationFactory factory)
     {
         _factory = factory;
     }

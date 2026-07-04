@@ -1,13 +1,13 @@
 using System.Net;
-using Microsoft.AspNetCore.Mvc.Testing;
 
 namespace ProductMiddleware.Tests.Integration;
 
-public class ProductsListEndpointTests : IClassFixture<WebApplicationFactory<Program>>
+[Collection("Integration")]
+public class ProductsListEndpointTests
 {
-    private readonly WebApplicationFactory<Program> _factory;
+    private readonly IntegrationWebApplicationFactory _factory;
 
-    public ProductsListEndpointTests(WebApplicationFactory<Program> factory)
+    public ProductsListEndpointTests(IntegrationWebApplicationFactory factory)
     {
         _factory = factory;
     }

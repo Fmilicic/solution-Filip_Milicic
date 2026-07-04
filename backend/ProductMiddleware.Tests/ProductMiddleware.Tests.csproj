@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ProductMiddleware.Api\ProductMiddleware.Api.csproj" />
+    <ProjectReference Include="..\ProductMiddleware.Infrastructure\ProductMiddleware.Infrastructure.csproj" />
   </ItemGroup>
 
 </Project>

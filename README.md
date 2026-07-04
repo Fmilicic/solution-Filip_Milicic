@@ -1,8 +1,9 @@
-# Product Middleware — Fullstack Monorepo
+# Product Middleware; Fullstack Monorepo
 
-Phase 1 of fullstack solution for abysalto academy.
+Phases 1 + 2 of task for AA: domain + infrastructure.
 
-Implemented skeletons + domain entities.
+Implemented skeletons + domain entities + infra for dummyJson.
+Also dependency injection.
 ```
 
 buildable with 'dotnet build', but no functionality implemented as yet.

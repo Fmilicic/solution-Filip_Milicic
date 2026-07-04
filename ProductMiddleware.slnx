@@ -1,0 +1,18 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path="Directory.Build.props" />
+    <File Path="Directory.Packages.props" />
+    <File Path="global.json" />
+    <File Path="README.md" />
+    <File Path=".gitignore" />
+  </Folder>
+  <Folder Name="/backend/">
+    <Project Path="backend/ProductMiddleware.Api/ProductMiddleware.Api.csproj" />
+    <Project Path="backend/ProductMiddleware.Application/ProductMiddleware.Application.csproj" />
+    <Project Path="backend/ProductMiddleware.Infrastructure/ProductMiddleware.Infrastructure.csproj" />
+    <Project Path="backend/ProductMiddleware.Tests/ProductMiddleware.Tests.csproj" />
+  </Folder>
+  <Folder Name="/frontend/">
+    <File Path="frontend/README.md" />
+  </Folder>
+</Solution>

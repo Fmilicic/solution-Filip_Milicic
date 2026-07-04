@@ -1,9 +1,9 @@
 # Product Middleware; Fullstack Monorepo
 
-Phases 1 + 2 of task for AA: domain + infrastructure.
+Phases 1-3 of task for AA.
 
-Implemented skeletons + domain entities + infra for dummyJson.
+Henceforth, only latest change will be noted until this is rebuilt into a proper readme. Latest: API.
 Also dependency injection.
 ```
 
-buildable with 'dotnet build', but no functionality implemented as yet.
+buildable with 'dotnet build'; API,swagger and implemented test allow for testing and dry-runs.

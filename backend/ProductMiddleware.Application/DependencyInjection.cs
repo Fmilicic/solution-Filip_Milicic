@@ -10,6 +10,8 @@ public static class DependencyInjection
     {
         services.AddScoped<ProductQueryService>();
         services.AddScoped<IProductQueryService>(sp => sp.GetRequiredService<ProductQueryService>());
+        services.AddScoped<AuthService>();
+        services.AddScoped<IAuthService>(sp => sp.GetRequiredService<AuthService>());
 
         return services;
     }

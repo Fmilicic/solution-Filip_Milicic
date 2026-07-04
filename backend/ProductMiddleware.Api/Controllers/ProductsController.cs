@@ -65,4 +65,70 @@ public sealed class ProductsController : ControllerBase
             return StatusCode(StatusCodes.Status502BadGateway, new ApiErrorResponse { Message = "Upstream product source is unavailable." });
         }
     }
+
+    [HttpGet("search")]
+    [Authorize]
+    public async Task<ActionResult<PagedProductsResponse>> SearchProducts(
+        [FromQuery] string query,
+        [FromQuery] int page = ProductQueryValidator.DefaultPage,
+        [FromQuery] int pageSize = ProductQueryValidator.DefaultPageSize,
+        CancellationToken cancellationToken = default)
+    {
+        var queryValidationError = ProductQueryValidator.ValidateSearchQuery(query);
+        if (queryValidationError is not null)
+        {
+            return BadRequest(new ApiErrorResponse { Message = queryValidationError });
+        }
+
+        var pagingValidationError = ProductQueryValidator.ValidatePaging(page, pageSize);
+        if (pagingValidationError is not null)
+        {
+            return BadRequest(new ApiErrorResponse { Message = pagingValidationError });
+        }
+
+        try
+        {
+            var result = await _productQueryService.SearchAsync(query, page, pageSize, cancellationToken);
+            return Ok(ProductResponseMapper.ToPagedResponse(result));
+        }
+        catch (HttpRequestException exception)
+        {
+            _logger.LogError(exception, "Upstream product search request failed for query {Query}", query);
+            return StatusCode(StatusCodes.Status502BadGateway, new ApiErrorResponse { Message = "Upstream product source is unavailable." });
+        }
+    }
+
+    [HttpGet("filter")]
+    [Authorize]
+    public async Task<ActionResult<PagedProductsResponse>> FilterProducts(
+        [FromQuery] string? category,
+        [FromQuery] decimal? minPrice,
+        [FromQuery] decimal? maxPrice,
+        [FromQuery] int page = ProductQueryValidator.DefaultPage,
+        [FromQuery] int pageSize = ProductQueryValidator.DefaultPageSize,
+        CancellationToken cancellationToken = default)
+    {
+        var filterValidationError = ProductQueryValidator.ValidateFilter(category, minPrice, maxPrice);
+        if (filterValidationError is not null)
+        {
+            return BadRequest(new ApiErrorResponse { Message = filterValidationError });
+        }
+
+        var pagingValidationError = ProductQueryValidator.ValidatePaging(page, pageSize);
+        if (pagingValidationError is not null)
+        {
+            return BadRequest(new ApiErrorResponse { Message = pagingValidationError });
+        }
+
+        try
+        {
+            var result = await _productQueryService.FilterAsync(category, minPrice, maxPrice, page, pageSize, cancellationToken);
+            return Ok(ProductResponseMapper.ToPagedResponse(result));
+        }
+        catch (HttpRequestException exception)
+        {
+            _logger.LogError(exception, "Upstream product filter request failed");
+            return StatusCode(StatusCodes.Status502BadGateway, new ApiErrorResponse { Message = "Upstream product source is unavailable." });
+        }
+    }
 }

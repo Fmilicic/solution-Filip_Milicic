@@ -14,5 +14,6 @@
   </Folder>
   <Folder Name="/frontend/">
     <File Path="frontend/README.md" />
+    <File Path="frontend/package.json" />
   </Folder>
 </Solution>

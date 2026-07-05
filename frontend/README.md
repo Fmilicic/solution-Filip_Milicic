@@ -1,6 +1,6 @@
 ﻿# Frontend
 
-React + TypeScript + Vite. Phase 2 complete (env, types, API client).
+React + TypeScript + Vite. Phase 3 complete (router and app shell).
 
 ## Setup
 

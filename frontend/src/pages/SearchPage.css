@@ -1,0 +1,27 @@
+.search-page__header {
+  margin-bottom: 20px;
+}
+
+.search-page__field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  margin-bottom: 20px;
+  max-width: 480px;
+  font-size: 15px;
+  color: var(--text-h);
+}
+
+.search-page__field input {
+  padding: 10px 12px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--bg);
+  color: var(--text-h);
+  font-size: 16px;
+}
+
+.search-page__validation {
+  margin: 0 0 16px;
+  color: var(--text-h);
+}

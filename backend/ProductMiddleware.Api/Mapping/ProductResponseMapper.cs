@@ -10,6 +10,7 @@ public static class ProductResponseMapper
     {
         return new ProductListItemResponse
         {
+            Id = product.Id,
             Image = product.ImageUrl,
             Name = product.Name,
             Price = product.Price,

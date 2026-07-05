@@ -1,6 +1,15 @@
 ﻿# Frontend
 
-React + TypeScript + Vite. Phase 3 complete (router and app shell).
+React + TypeScript + Vite.
+
+## Current implementation: phases 4-7
+
+| Phase | Done |
+|-------|------|
+| 4 | Product list with pagination, loading/empty/error, URL `page` and `pageSize` |
+| 5 | Product detail page, back link preserves list state |
+| 6 | Login form, auth context, token in sessionStorage, protected routes |
+| 7 | Search with debounce and URL `query`; filter by category/price with URL params |
 
 ## Setup
 
@@ -21,6 +30,8 @@ npm run dev
 Dev server: http://localhost:5173
 
 Backend must be running on http://localhost:5063.
+
+Test user: `emilys` / `emilyspass`
 
 ## Scripts
 

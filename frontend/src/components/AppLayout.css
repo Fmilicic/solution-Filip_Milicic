@@ -52,6 +52,31 @@
   border: 1px solid var(--accent-border);
 }
 
+.app-nav__account {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.app-nav__username {
+  font-size: 14px;
+  color: var(--text-h);
+}
+
+.app-nav__button {
+  padding: 8px 14px;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  background: var(--code-bg);
+  color: var(--text-h);
+  cursor: pointer;
+  font-size: 15px;
+}
+
+.app-nav__button:hover {
+  box-shadow: var(--shadow);
+}
+
 .app-main {
   flex: 1;
   padding: 32px;

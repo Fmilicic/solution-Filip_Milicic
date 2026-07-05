@@ -1,9 +1,9 @@
 import { NavLink, Outlet } from 'react-router-dom';
-import { getAccessToken } from '../lib/authStorage';
+import { useAuth } from '../context/AuthContext';
 import './AppLayout.css';
 
 export function AppLayout() {
-  const isAuthenticated = Boolean(getAccessToken());
+  const { isAuthenticated, username, logout } = useAuth();
 
   return (
     <div className="app-shell">
@@ -25,9 +25,18 @@ export function AppLayout() {
           <NavLink to="/filter" className="app-nav__link">
             Filter
           </NavLink>
-          <NavLink to="/login" className="app-nav__link">
-            {isAuthenticated ? 'Account' : 'Login'}
-          </NavLink>
+          {!isAuthenticated ? (
+            <NavLink to="/login" className="app-nav__link">
+              Login
+            </NavLink>
+          ) : (
+            <div className="app-nav__account">
+              <span className="app-nav__username">{username}</span>
+              <button type="button" className="app-nav__button" onClick={logout}>
+                Logout
+              </button>
+            </div>
+          )}
         </nav>
       </header>
 

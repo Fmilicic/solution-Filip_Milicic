@@ -1,6 +1,6 @@
 # Product Middleware
 
-Fullstack monorepo. Backend complete. Frontend Phase 1 complete (Vite scaffold).
+Fullstack monorepo. Backend complete. Frontend Phase 2 complete (API client).
 
 
 To build & run:
@@ -22,7 +22,7 @@ Open `ProductMiddleware.slnx` in Visual Studio 2026. Startup project: `ProductMi
 
 ## Frontend
 
-Phase 1 done. From repo root:
+Phase 2 done. API client in `src/api/client.ts`, types in `src/types/api.ts`.
 ```powershell
 cd frontend
 npm install

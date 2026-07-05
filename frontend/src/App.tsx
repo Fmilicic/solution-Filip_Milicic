@@ -1,11 +1,39 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import reactLogo from './assets/react.svg'
 import viteLogo from './assets/vite.svg'
 import heroImg from './assets/hero.png'
+import { apiGet, getBaseUrl } from './api/client'
+import type { Category } from './types/api'
 import './App.css'
 
 function App() {
   const [count, setCount] = useState(0)
+  const [apiStatus, setApiStatus] = useState('Checking API connection...')
+
+  useEffect(() => {
+    let cancelled = false
+
+    async function checkApi() {
+      try {
+        const categories = await apiGet<Category[]>('/api/categories')
+        if (!cancelled) {
+          setApiStatus(`API connected (${categories.length} categories from ${getBaseUrl()})`)
+          console.log('Categories:', categories)
+        }
+      } catch (error) {
+        if (!cancelled) {
+          const message = error instanceof Error ? error.message : 'Unknown error'
+          setApiStatus(`API check failed: ${message}`)
+        }
+      }
+    }
+
+    void checkApi()
+
+    return () => {
+      cancelled = true
+    }
+  }, [])
 
   return (
     <>
@@ -18,9 +46,10 @@ function App() {
         <div>
           <h1>Product Middleware</h1>
           <p>
-            Frontend scaffold (Phase 1). Catalog SPA will call the API at{' '}
-            <code>http://localhost:5063</code>.
+            Phase 2: env, types, and API client. Catalog SPA calls{' '}
+            <code>{getBaseUrl()}</code>.
           </p>
+          <p>{apiStatus}</p>
         </div>
         <button
           type="button"

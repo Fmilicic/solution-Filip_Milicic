@@ -16,6 +16,8 @@ public static class DependencyInjection
         services.AddScoped<IAuthService>(sp => sp.GetRequiredService<AuthService>());
         services.AddScoped<ProductAdminService>();
         services.AddScoped<IProductAdminService>(sp => sp.GetRequiredService<ProductAdminService>());
+        services.AddScoped<CategoryService>();
+        services.AddScoped<ICategoryService>(sp => sp.GetRequiredService<CategoryService>());
 
         return services;
     }

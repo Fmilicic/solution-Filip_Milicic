@@ -19,6 +19,7 @@ public static class DependencyInjection
     {
         services.Configure<DummyJsonOptions>(configuration.GetSection(DummyJsonOptions.SectionName));
         services.Configure<JwtOptions>(configuration.GetSection(JwtOptions.SectionName));
+        services.Configure<CorsOptions>(configuration.GetSection(CorsOptions.SectionName));
 
         var connectionString = configuration.GetConnectionString("ProductsDb") ?? "Data Source=products.db";
         connectionString = ResolveSqliteConnectionString(connectionString, contentRootPath);
@@ -27,8 +28,10 @@ public static class DependencyInjection
 
         services.AddHttpClient<DummyJsonProductClient>();
         services.AddHttpClient<DummyJsonAuthClient>();
+        services.AddHttpClient<DummyJsonCategoryClient>();
 
         services.AddScoped<IAuthClient, DummyJsonAuthClient>();
+        services.AddScoped<ICategoryClient, DummyJsonCategoryClient>();
         services.AddScoped<ITokenService, JwtTokenService>();
         services.AddScoped<IProductRepository, ProductRepository>();
         services.AddScoped<DatabaseProductSource>();

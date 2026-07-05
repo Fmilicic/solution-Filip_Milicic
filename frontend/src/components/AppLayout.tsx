@@ -25,6 +25,11 @@ export function AppLayout() {
           <NavLink to="/filter" className="app-nav__link">
             Filter
           </NavLink>
+          {isAuthenticated ? (
+            <NavLink to="/admin/products" className="app-nav__link">
+              Admin
+            </NavLink>
+          ) : null}
           {!isAuthenticated ? (
             <NavLink to="/login" className="app-nav__link">
               Login

@@ -1,10 +1,9 @@
-import { useCallback, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { productListDefaults, searchProducts } from '../api/products';
+import { productListDefaults } from '../api/products';
 import { PagedProductResults } from '../components/PagedProductResults';
-import { useAuth } from '../context/AuthContext';
 import { useDebouncedValue } from '../hooks/useDebouncedValue';
-import type { PagedProducts } from '../types/api';
+import { useSearchProductsQuery } from '../hooks/useProductQueries';
 import './SearchPage.css';
 
 function parsePositiveInt(value: string | null, fallback: number): number {
@@ -13,7 +12,6 @@ function parsePositiveInt(value: string | null, fallback: number): number {
 }
 
 export function SearchPage() {
-  const { token } = useAuth();
   const [searchParams, setSearchParams] = useSearchParams();
 
   const queryFromUrl = searchParams.get('query') ?? '';
@@ -22,12 +20,8 @@ export function SearchPage() {
 
   const [queryInput, setQueryInput] = useState(queryFromUrl);
   const debouncedQuery = useDebouncedValue(queryInput, 300);
-
-  const [data, setData] = useState<PagedProducts | null>(null);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<string | null>(null);
-  const [validationError, setValidationError] = useState<string | null>(null);
-  const [reloadKey, setReloadKey] = useState(0);
+  const activeQuery = searchParams.get('query')?.trim() ?? '';
+  const validationError = activeQuery ? null : 'Enter a search query.';
 
   useEffect(() => {
     setQueryInput(queryFromUrl);
@@ -37,59 +31,27 @@ export function SearchPage() {
     const trimmed = debouncedQuery.trim();
     const currentQuery = searchParams.get('query') ?? '';
 
-    if (!trimmed) {
+    if (!trimmed || trimmed === currentQuery) {
       return;
     }
-
-    if (trimmed !== currentQuery) {
-      setSearchParams({
-        query: trimmed,
-        page: '1',
-        pageSize: String(pageSize),
-      });
-    }
-  }, [debouncedQuery, pageSize, searchParams, setSearchParams]);
-
-  const loadSearch = useCallback(async () => {
-    const query = searchParams.get('query')?.trim() ?? '';
-
-    if (!query) {
-      setValidationError('Enter a search query.');
-      setData(null);
-      setError(null);
-      setLoading(false);
-      return;
-    }
-
-    if (!token) {
-      return;
-    }
-
-    setValidationError(null);
-    setLoading(true);
-    setError(null);
-
-    try {
-      const result = await searchProducts(query, page, pageSize, token);
-      setData(result);
-    } catch (loadError) {
-      const message = loadError instanceof Error ? loadError.message : 'Search failed.';
-      setData(null);
-      setError(message);
-    } finally {
-      setLoading(false);
-    }
-  }, [page, pageSize, searchParams, token]);
-
-  useEffect(() => {
-    void loadSearch();
-  }, [loadSearch, reloadKey]);
-
-  function handlePageChange(nextPage: number) {
-    const query = searchParams.get('query')?.trim() ?? '';
 
     setSearchParams({
-      query,
+      query: trimmed,
+      page: '1',
+      pageSize: String(pageSize),
+    });
+  }, [debouncedQuery, pageSize, searchParams, setSearchParams]);
+
+  const { data, isLoading, error, refetch } = useSearchProductsQuery(
+    activeQuery,
+    page,
+    pageSize,
+    Boolean(activeQuery),
+  );
+
+  function handlePageChange(nextPage: number) {
+    setSearchParams({
+      query: activeQuery,
       page: String(nextPage),
       pageSize: String(pageSize),
     });
@@ -115,10 +77,10 @@ export function SearchPage() {
       {validationError ? <p className="search-page__validation">{validationError}</p> : null}
 
       <PagedProductResults
-        loading={loading}
-        error={error}
-        data={validationError ? null : data}
-        onRetry={() => setReloadKey((current) => current + 1)}
+        loading={isLoading}
+        error={error instanceof Error ? error.message : error ? 'Search failed.' : null}
+        data={validationError ? null : (data ?? null)}
+        onRetry={() => void refetch()}
         onPageChange={handlePageChange}
         emptyMessage="No products matched your search."
       />

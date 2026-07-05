@@ -1,16 +1,8 @@
-import { useCallback, useEffect, useState } from 'react';
 import { Link, useLocation, useParams } from 'react-router-dom';
-import { fetchProductById } from '../api/products';
 import { ErrorState, LoadingState } from '../components/PageStatus';
-import type { ProductDetail } from '../types/api';
+import { useProductQuery } from '../hooks/useProductQueries';
+import { formatPrice } from '../lib/formatPrice';
 import './ProductDetailPage.css';
-
-function formatPrice(price: number): string {
-  return new Intl.NumberFormat(undefined, {
-    style: 'currency',
-    currency: 'USD',
-  }).format(price);
-}
 
 export function ProductDetailPage() {
   const { id } = useParams();
@@ -24,37 +16,15 @@ export function ProductDetailPage() {
       ? location.state.from
       : '/';
 
-  const [product, setProduct] = useState<ProductDetail | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [reloadKey, setReloadKey] = useState(0);
+  const { data: product, isLoading, error, refetch } = useProductQuery(productId);
 
-  const loadProduct = useCallback(async () => {
-    if (!Number.isInteger(productId) || productId < 1) {
-      setError('Invalid product id.');
-      setProduct(null);
-      setLoading(false);
-      return;
-    }
-
-    setLoading(true);
-    setError(null);
-
-    try {
-      const result = await fetchProductById(productId);
-      setProduct(result);
-    } catch (loadError) {
-      const message = loadError instanceof Error ? loadError.message : 'Failed to load product.';
-      setProduct(null);
-      setError(message);
-    } finally {
-      setLoading(false);
-    }
-  }, [productId]);
-
-  useEffect(() => {
-    void loadProduct();
-  }, [loadProduct, reloadKey]);
+  if (!Number.isInteger(productId) || productId < 1) {
+    return (
+      <section className="page product-detail-page">
+        <ErrorState message="Invalid product id." />
+      </section>
+    );
+  }
 
   return (
     <section className="page product-detail-page">
@@ -62,13 +32,16 @@ export function ProductDetailPage() {
         Back to list
       </Link>
 
-      {loading ? <LoadingState message="Loading product..." /> : null}
+      {isLoading ? <LoadingState message="Loading product..." /> : null}
 
-      {!loading && error ? (
-        <ErrorState message={error} onRetry={() => setReloadKey((current) => current + 1)} />
+      {!isLoading && error ? (
+        <ErrorState
+          message={error instanceof Error ? error.message : 'Failed to load product.'}
+          onRetry={() => void refetch()}
+        />
       ) : null}
 
-      {!loading && !error && product ? (
+      {!isLoading && !error && product ? (
         <article className="product-detail-page__content">
           <img
             src={product.image}

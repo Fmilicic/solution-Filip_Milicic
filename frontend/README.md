@@ -2,22 +2,23 @@
 
 React + TypeScript + Vite.
 
-## Current implementation: phases 4-7
+## Current implementation: phases 4-10
 
 | Phase | Done |
 |-------|------|
-| 4 | Product list with pagination, loading/empty/error, URL `page` and `pageSize` |
-| 5 | Product detail page, back link preserves list state |
-| 6 | Login form, auth context, token in sessionStorage, protected routes |
-| 7 | Search with debounce and URL `query`; filter by category/price with URL params |
+| 4 | Product list, pagination, URL params, loading/empty/error |
+| 5 | Product detail, back link preserves list state |
+| 6 | Login, auth context, protected routes |
+| 7 | Search (debounce + URL), filter (category/price + URL) |
+| 8 | Admin CRUD at `/admin/products` (local ids 10000+) |
+| 9 | TanStack Query caching and cache invalidation after admin writes |
+| 10 | Vitest + React Testing Library tests |
 
 ## Setup
 
 ```text
 VITE_API_BASE_URL=http://localhost:5063
 ```
-
-Copy `.env.example` to `.env` if needed.
 
 ## Run
 
@@ -27,10 +28,6 @@ npm install
 npm run dev
 ```
 
-Dev server: http://localhost:5173
-
-Backend must be running on http://localhost:5063.
-
 Test user: `emilys` / `emilyspass`
 
 ## Scripts
@@ -39,3 +36,4 @@ Test user: `emilys` / `emilyspass`
 |---------|---------|
 | `npm run dev` | Dev server |
 | `npm run build` | Production build |
+| `npm test` | Unit/component tests |

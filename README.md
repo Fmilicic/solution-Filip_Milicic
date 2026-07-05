@@ -1,18 +1,8 @@
 # Product Middleware
 
-Fullstack monorepo. Backend complete. Frontend phases 4-7 complete.
-
-## Layout
-
-```text
-ProductMiddleware.slnx
-backend/     .NET 8 API
-frontend/    React SPA
-```
+Fullstack monorepo. Backend complete. Frontend phases 4-10 complete.
 
 ## Backend
-
-From repo root:
 
 ```powershell
 dotnet build
@@ -25,35 +15,32 @@ dotnet run --project backend/ProductMiddleware.Api
 | API | http://localhost:5063 |
 | Swagger | http://localhost:5063/swagger |
 | Test user | `emilys` / `emilyspass` |
-| Tests | 13 (integration tests call live DummyJSON) |
-
-Open `ProductMiddleware.slnx` in Visual Studio 2026. Startup project: `ProductMiddleware.Api`, profile: `http`.
+| Tests | 13 |
 
 ## Frontend
 
-Phases 4-7 implemented:
+Phases 4-10:
 
-- **4:** product list, pagination, URL sync, loading/empty/error
-- **5:** product detail, back navigation with list state
-- **6:** login, auth context, protected search/filter routes
-- **7:** search (debounce + URL), filter (category + price + URL)
+- **4:** product list, pagination, URL sync
+- **5:** product detail, back navigation
+- **6:** login, auth context, protected routes
+- **7:** search and filter with URL params
+- **8:** admin create/update/delete for local products
+- **9:** TanStack Query client caching
+- **10:** frontend tests (`npm test`)
 
 ```powershell
 cd frontend
 npm install
 npm run dev
+npm test
 ```
 
 Dev: http://localhost:5173
 
-```text
-VITE_API_BASE_URL=http://localhost:5063
-```
-
 ## Manual check
 
-1. `GET /api/products` via product list page
-2. Open a product detail; back returns to the same list page
-3. Login, then search and filter
-4. Copy search/filter URL; refresh keeps results
-5. Admin create on backend still works via Swagger if needed
+1. Product list and detail
+2. Login; search and filter
+3. Admin create; confirm on list after cache refresh
+4. `npm test` and `dotnet test` both pass

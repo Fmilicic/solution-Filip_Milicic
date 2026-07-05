@@ -1,16 +1,10 @@
 import { Link, useLocation } from 'react-router-dom';
 import type { ProductListItem } from '../types/api';
+import { formatPrice } from '../lib/formatPrice';
 import './ProductCard.css';
 
 interface ProductCardProps {
   product: ProductListItem;
-}
-
-function formatPrice(price: number): string {
-  return new Intl.NumberFormat(undefined, {
-    style: 'currency',
-    currency: 'USD',
-  }).format(price);
 }
 
 export function ProductCard({ product }: ProductCardProps) {

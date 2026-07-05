@@ -1,8 +1,7 @@
-import { useCallback, useEffect, useState } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { fetchProducts, productListDefaults } from '../api/products';
+import { productListDefaults } from '../api/products';
 import { PagedProductResults } from '../components/PagedProductResults';
-import type { PagedProducts } from '../types/api';
+import { useProductsQuery } from '../hooks/useProductQueries';
 import './ProductListPage.css';
 
 function parsePositiveInt(value: string | null, fallback: number): number {
@@ -15,30 +14,7 @@ export function ProductListPage() {
   const page = parsePositiveInt(searchParams.get('page'), productListDefaults.page);
   const pageSize = parsePositiveInt(searchParams.get('pageSize'), productListDefaults.pageSize);
 
-  const [data, setData] = useState<PagedProducts | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
-  const [reloadKey, setReloadKey] = useState(0);
-
-  const loadProducts = useCallback(async () => {
-    setLoading(true);
-    setError(null);
-
-    try {
-      const result = await fetchProducts(page, pageSize);
-      setData(result);
-    } catch (loadError) {
-      const message = loadError instanceof Error ? loadError.message : 'Failed to load products.';
-      setData(null);
-      setError(message);
-    } finally {
-      setLoading(false);
-    }
-  }, [page, pageSize]);
-
-  useEffect(() => {
-    void loadProducts();
-  }, [loadProducts, reloadKey]);
+  const { data, isLoading, error, refetch } = useProductsQuery(page, pageSize);
 
   function handlePageChange(nextPage: number) {
     setSearchParams({
@@ -55,10 +31,10 @@ export function ProductListPage() {
       </header>
 
       <PagedProductResults
-        loading={loading}
-        error={error}
-        data={data}
-        onRetry={() => setReloadKey((current) => current + 1)}
+        loading={isLoading}
+        error={error instanceof Error ? error.message : error ? 'Failed to load products.' : null}
+        data={data ?? null}
+        onRetry={() => void refetch()}
         onPageChange={handlePageChange}
       />
     </section>
